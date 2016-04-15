@@ -55,9 +55,9 @@ public class Application {
         return new Receiver();
     }
     
-//    @Bean RabbitAdmin admin(ConnectionFactory connectionFactory){
-//    	return new RabbitAdmin(connectionFactory);
-//    }
+    @Bean RabbitAdmin admin(ConnectionFactory connectionFactory){
+    	return new RabbitAdmin(connectionFactory);
+    }
 
 	@Bean
 	MessageListenerAdapter listenerAdapter(Receiver receiver) {
