@@ -26,7 +26,7 @@ public class TestController {
 	public Test test(
 			@RequestParam(value = "name", defaultValue = "unknown") String name) {
 
-		Queue queue = new Queue(name);
+		Queue queue = new Queue(name, false);
 		rabbitAdmin.declareQueue(queue);
 
 		rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange)
