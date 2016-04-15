@@ -33,7 +33,7 @@ public class Application {
 //
 	@Bean
 	TopicExchange exchange() {
-		return new TopicExchange("commands");
+		return new TopicExchange("commands", false, false);
 	}
 //
 //	@Bean

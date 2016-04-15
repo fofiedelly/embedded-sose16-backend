@@ -18,24 +18,22 @@ public class TestController {
 
 	@Autowired
 	RabbitAdmin rabbitAdmin;
-	
+
 	@Autowired
 	TopicExchange exchange;
 
 	@RequestMapping("/test")
-	public Test test(@RequestParam(value="name", defaultValue="unknown") String name) {
+	public Test test(
+			@RequestParam(value = "name", defaultValue = "unknown") String name) {
 
 		Queue queue = new Queue(name);
 		rabbitAdmin.declareQueue(queue);
-
-//		TopicExchange exchange = new TopicExchange("sample-topic-exchange");
-//		rabbitAdmin.declareExchange(exchange);
 
 		rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange)
 				.with(name));
 
 		rabbitTemplate.convertAndSend(name, "Hello from RabbitMQ!");
-		return new Test("message send!");
+		return new Test("message send to queue " + name + "!");
 	}
 
 }
