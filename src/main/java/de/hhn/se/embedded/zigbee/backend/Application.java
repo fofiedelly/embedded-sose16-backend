@@ -1,5 +1,7 @@
 package de.hhn.se.embedded.zigbee.backend;
 
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
@@ -67,7 +69,6 @@ public class Application {
     @RequestMapping("/test")
     public Test greeting() {
         rabbitTemplate.convertAndSend(queueName, "Hello from RabbitMQ!");
-//        receiver().getLatch().await(10000, TimeUnit.MILLISECONDS);
         return new Test("message send!");
     }
 
