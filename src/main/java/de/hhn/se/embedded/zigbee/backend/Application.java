@@ -1,12 +1,11 @@
 package de.hhn.se.embedded.zigbee.backend;
 
-import java.util.concurrent.TimeUnit;
-
 import org.springframework.amqp.core.Binding;
 import org.springframework.amqp.core.BindingBuilder;
 import org.springframework.amqp.core.Queue;
 import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.connection.ConnectionFactory;
+import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.amqp.rabbit.listener.SimpleMessageListenerContainer;
 import org.springframework.amqp.rabbit.listener.adapter.MessageListenerAdapter;
@@ -27,20 +26,20 @@ public class Application {
 	@Autowired
 	RabbitTemplate rabbitTemplate;
 
-	@Bean
-	Queue queue() {
-		return new Queue(queueName, false);
-	}
-
-	@Bean
-	TopicExchange exchange() {
-		return new TopicExchange("spring-boot-exchange");
-	}
-
-	@Bean
-	Binding binding(Queue queue, TopicExchange exchange) {
-		return BindingBuilder.bind(queue).to(exchange).with(queueName);
-	}
+//	@Bean
+//	Queue queue() {
+//		return new Queue(queueName, false);
+//	}
+//
+//	@Bean
+//	TopicExchange exchange() {
+//		return new TopicExchange("spring-boot-exchange");
+//	}
+//
+//	@Bean
+//	Binding binding(Queue queue, TopicExchange exchange) {
+//		return BindingBuilder.bind(queue).to(exchange).with(queueName);
+//	}
 
 	@Bean
 	SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
@@ -55,6 +54,10 @@ public class Application {
     Receiver receiver() {
         return new Receiver();
     }
+    
+//    @Bean RabbitAdmin admin(ConnectionFactory connectionFactory){
+//    	return new RabbitAdmin(connectionFactory);
+//    }
 
 	@Bean
 	MessageListenerAdapter listenerAdapter(Receiver receiver) {
@@ -66,10 +69,6 @@ public class Application {
     }
 
 
-    @RequestMapping("/test")
-    public Test greeting() {
-        rabbitTemplate.convertAndSend(queueName, "Hello from RabbitMQ!");
-        return new Test("message send!");
-    }
+
 
 }
