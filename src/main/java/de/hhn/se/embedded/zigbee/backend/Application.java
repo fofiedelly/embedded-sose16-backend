@@ -26,20 +26,12 @@ public class Application {
 	@Autowired
 	RabbitTemplate rabbitTemplate;
 
-//	@Bean
-//	Queue queue() {
-//		return new Queue(queueName, false);
-//	}
-//
+
 	@Bean
 	TopicExchange exchange() {
-		return new TopicExchange("commands", false, false);
+		return new TopicExchange("ha-exchange");
 	}
-//
-//	@Bean
-//	Binding binding(Queue queue, TopicExchange exchange) {
-//		return BindingBuilder.bind(queue).to(exchange).with(queueName);
-//	}
+
 
 	@Bean
 	SimpleMessageListenerContainer container(ConnectionFactory connectionFactory, MessageListenerAdapter listenerAdapter) {
