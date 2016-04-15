@@ -7,6 +7,7 @@ import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
@@ -17,21 +18,23 @@ public class TestController {
 
 	@Autowired
 	RabbitAdmin rabbitAdmin;
+	
+	@Autowired
+	TopicExchange exchange;
 
 	@RequestMapping("/test")
-	public Test greeting() {
+	public Test test(@RequestParam(value="name", defaultValue="unknown") String name) {
 
-		Queue queue = new Queue("sample-queue");
+		Queue queue = new Queue(name);
 		rabbitAdmin.declareQueue(queue);
 
-		TopicExchange exchange = new TopicExchange("sample-topic-exchange");
-		rabbitAdmin.declareExchange(exchange);
+//		TopicExchange exchange = new TopicExchange("sample-topic-exchange");
+//		rabbitAdmin.declareExchange(exchange);
 
 		rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange)
-				.with("sample-key"));
+				.with(name));
 
-		// rabbitTemplate.convertAndSend(queueName, "Hello from RabbitMQ!");
-		rabbitTemplate.convertAndSend("sample-key", "Hello from RabbitMQ!");
+		rabbitTemplate.convertAndSend(name, "Hello from RabbitMQ!");
 		return new Test("message send!");
 	}
 

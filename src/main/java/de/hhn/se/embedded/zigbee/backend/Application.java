@@ -31,10 +31,10 @@ public class Application {
 //		return new Queue(queueName, false);
 //	}
 //
-//	@Bean
-//	TopicExchange exchange() {
-//		return new TopicExchange("spring-boot-exchange");
-//	}
+	@Bean
+	TopicExchange exchange() {
+		return new TopicExchange("commands");
+	}
 //
 //	@Bean
 //	Binding binding(Queue queue, TopicExchange exchange) {
