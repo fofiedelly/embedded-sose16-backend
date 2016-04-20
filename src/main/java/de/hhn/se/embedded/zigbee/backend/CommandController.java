@@ -6,6 +6,7 @@ import org.springframework.amqp.core.TopicExchange;
 import org.springframework.amqp.rabbit.core.RabbitAdmin;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,31 +29,24 @@ public class CommandController {
 	ObjectMapper objectMapper = new ObjectMapper();
 
 	@RequestMapping("/command")
-	public String test(@RequestParam(value = "targetServer") String targetServer,
-			@RequestParam(value = "targetDevice") String targetDevice,
-			@RequestParam(value = "type") String type,
-			@RequestParam(value = "value") float value) {
+	public String test(@RequestBody Command command) {
 
-		Queue queue = new Queue(targetServer, false);
+		Queue queue = new Queue(command.getTargetServer(), false);
 		rabbitAdmin.declareQueue(queue);
 
 		rabbitAdmin.declareBinding(BindingBuilder.bind(queue).to(exchange)
-				.with(targetServer));
+				.with(command.getTargetServer()));
 		
-		Command c = new Command();
-		c.setTarget(targetDevice);
-		c.setValue(value);
-		c.setType(type);
-		
+	
 		
 		String json = null;
 		try {
-			json = objectMapper.writeValueAsString(c);
+			json = objectMapper.writeValueAsString(command);
 		} catch (JsonProcessingException e) {
 			e.printStackTrace();
 		}
 
-		rabbitTemplate.convertAndSend(targetServer, json);
+		rabbitTemplate.convertAndSend(command.getTargetServer(), json);
 		return "command send";
 	}
 
