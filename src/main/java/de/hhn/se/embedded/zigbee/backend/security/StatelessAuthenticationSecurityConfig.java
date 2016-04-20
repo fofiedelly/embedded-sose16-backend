@@ -31,6 +31,7 @@ public class StatelessAuthenticationSecurityConfig extends WebSecurityConfigurer
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http
+				.csrf().disable()
 				.exceptionHandling().and()
 				.anonymous().and()
 				.servletApi().and()
