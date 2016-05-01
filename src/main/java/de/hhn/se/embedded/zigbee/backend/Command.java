@@ -2,29 +2,13 @@ package de.hhn.se.embedded.zigbee.backend;
 
 public class Command {
 
-	private String targetDevice;
-
-	private String targetServer;
+	public enum CommandType {
+		GET, SET
+	}
 
 	private String type;
 
 	private float value;
-
-	public String getTargetDevice() {
-		return targetDevice;
-	}
-
-	public void setTargetDevice(String targetDevice) {
-		this.targetDevice = targetDevice;
-	}
-
-	public String getTargetServer() {
-		return targetServer;
-	}
-
-	public void setTargetServer(String targetServer) {
-		this.targetServer = targetServer;
-	}
 
 	public String getType() {
 		return type;

@@ -42,9 +42,14 @@ public class UserController {
 		return new User(authentication.getName()); // anonymous user support
 	}
 
-	@RequestMapping(value = "/api/users/add", method = RequestMethod.POST)
-	public User addUser(@RequestBody final User user, HttpServletRequest req,
+	@RequestMapping(value = "/api/register", method = RequestMethod.POST)
+	public ResponseEntity<String> addUser(@RequestBody final User user, HttpServletRequest req,
 			HttpServletResponse res) {
+		
+		if (user.getPassword() == null || user.getPassword().length() < 4) {
+			return new ResponseEntity<String>("password to short",
+					HttpStatus.UNPROCESSABLE_ENTITY);
+		}
 
 		User newUser = this.signUpService.execute(user.getUsername(),
 				user.getPassword());
@@ -55,7 +60,8 @@ public class UserController {
 
 		tokenAuthenticationService.addAuthentication(res, authentication);
 
-		return ((UserAuthentication) authentication).getDetails();
+//		return ((UserAuthentication) authentication).getDetails();
+		return new ResponseEntity<String>("user successfully registered", HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/api/users/current", method = RequestMethod.PATCH)

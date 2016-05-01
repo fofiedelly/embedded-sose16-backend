@@ -7,10 +7,17 @@ buildscript {
     }
 }
 
+plugins { 
+    id "org.asciidoctor.convert" version "1.5.2"
+}
+
 apply plugin: 'java'
 apply plugin: 'eclipse'
 apply plugin: 'idea'
 apply plugin: 'spring-boot'
+
+
+
 
 jar {
     baseName = 'backend'
@@ -27,12 +34,15 @@ targetCompatibility = 1.7
 dependencies {
     compile("org.springframework.boot:spring-boot-starter-amqp")
     compile("org.springframework.boot:spring-boot-starter-web")
+    compile("org.springframework.boot:spring-boot-starter-test")
     compile('com.fasterxml.jackson.core:jackson-core:2.7.3')
     compile('org.springframework.boot:spring-boot-starter-data-jpa')
   	compile('org.springframework.boot:spring-boot-starter-security')
+  	compile ('org.springframework.security:spring-security-test:4.0.1.RELEASE')
   	compile('org.hibernate:hibernate-validator')
     testCompile("junit:junit")
     runtime('com.h2database:h2')
+    testCompile 'org.springframework.restdocs:spring-restdocs-mockmvc:1.0.1.RELEASE'
 }
 
 task wrapper(type: Wrapper) {
@@ -50,4 +60,20 @@ stage.mustRunAfter(clean)
 
 clean << {
     project.file('app.jar').delete()
+}
+
+
+
+ext { 
+    snippetsDir = file('build/generated-snippets')
+}
+
+test { 
+    outputs.dir snippetsDir
+}
+
+asciidoctor { 
+    attributes 'snippets': snippetsDir 
+    inputs.dir snippetsDir 
+    dependsOn test 
 }
