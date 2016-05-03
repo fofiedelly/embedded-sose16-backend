@@ -92,6 +92,7 @@ public class Application {
 			}
 
 			private void addUser(String username, String password) {
+				
 				User user = new User();
 				user.setUsername(username);
 				user.setPassword(new BCryptPasswordEncoder().encode(password));
