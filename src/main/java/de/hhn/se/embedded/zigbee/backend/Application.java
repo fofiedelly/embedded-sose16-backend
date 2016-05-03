@@ -21,6 +21,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.filter.CharacterEncodingFilter;
 
+import de.hhn.se.embedded.zigbee.backend.device.Device;
+import de.hhn.se.embedded.zigbee.backend.device.DeviceRepository;
+import de.hhn.se.embedded.zigbee.backend.room.Room;
+import de.hhn.se.embedded.zigbee.backend.room.RoomRepository;
 import de.hhn.se.embedded.zigbee.backend.security.User;
 import de.hhn.se.embedded.zigbee.backend.security.UserRepository;
 import de.hhn.se.embedded.zigbee.backend.security.UserRole;
@@ -33,6 +37,12 @@ public class Application {
 
 	@Autowired
 	RabbitTemplate rabbitTemplate;
+	
+	@Autowired
+	private RoomRepository roomRepository;
+
+	@Autowired
+	DeviceRepository deviceRepository;
 
 	@Bean
 	TopicExchange exchange() {
@@ -87,7 +97,39 @@ public class Application {
 				user.setPassword(new BCryptPasswordEncoder().encode(password));
 				user.grantRole(username.equals("admin") ? UserRole.ADMIN
 						: UserRole.USER);
-				userRepository.save(user);
+				user = userRepository.save(user);
+				
+
+				String[][] rooms = { { "Wohzimmer", "001" }, { "Schlafzimmer", "002" }, { "Küche", "003" } };
+				String[][] devices = { { "Heizung", "001" }, { "Licht", "002" }, { "Nachttischlampe", "003" } };
+
+				for (int i = 0; i < rooms.length; i++) {
+					for (int j = 0; j < rooms[i].length; j++) {
+
+						Room room = new Room();
+						room.setRoomId(rooms[i][1]);
+						room.setName(rooms[i][0]);
+						room.setUser(user);
+
+						room = roomRepository.save(room);
+
+						for (int k = 0; k < devices.length; k++) {
+							for (int l = 0; l < devices[k].length; l++) {
+
+								Device device = new Device();
+								device.setDeviceId(room.getRoomId() + devices[k][1]);
+								device.setName(devices[k][0]);
+								device.setRoom(room);
+
+								deviceRepository.save(device);
+
+							}
+
+						}
+
+					}
+
+				}
 			}
 		};
 	}
