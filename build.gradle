@@ -80,4 +80,11 @@ asciidoctor {
     attributes 'snippets': snippetsDir 
     inputs.dir snippetsDir 
     dependsOn test 
+    
+    backends = ['html5', 'pdf']
+    attributes = [
+            toc: 'left',
+            toclevels: '2',
+            numbered: ''
+    ]
 }

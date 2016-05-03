@@ -50,8 +50,10 @@ public class Documentation {
 
 	@Autowired
 	private WebApplicationContext context;
+	
 
 	private MockMvc mockMvc;
+	
 
 	@Before
 	public void setUp() {
