@@ -142,55 +142,55 @@ public class Documentation {
 		
 	}
 	
-	@Test
-	public void doCommand() throws Exception {
-		
-		
-		Command c = new Command();
-		c.setType(CommandType.SET.name());
-		c.setValue(20);
-		
-		Room room = new Room();
-		room.setRoomId(ROOM_ID);
-		room.setName("Wohnzimmer");
-		
-		Device device = new Device();
-		device.setName("Heizung");
-		device.setType(Type.HEATING.name());
-		device.setDeviceId(DEVICE_ID);
-		
-		
-		this.mockMvc.perform(put("/api/rooms/"+room.getRoomId())
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(this.objectMapper.writeValueAsString(room))
-				.header("X-AUTH-TOKEN", TOKEN))
-				.andExpect(status().isOk());	
-		
-
-		
-		this.mockMvc.perform(put("/api/rooms/"+room.getRoomId()+"/devices/"+ device.getDeviceId())
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(this.objectMapper.writeValueAsString(device))
-				.header("X-AUTH-TOKEN", TOKEN))
-				.andExpect(status().isOk()).andDo(document("register-device-success"));
-		
-		
-		
-		this.mockMvc.perform(post("/api/rooms/"+room.getRoomId()+"/devices/"+ device.getDeviceId()+"/command")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(this.objectMapper.writeValueAsString(c))
-				.header("X-AUTH-TOKEN", TOKEN))
-				.andExpect(status().isOk()).andDo(document("do-command-success"));
-		
-		
-		this.mockMvc.perform(post("/api/rooms/"+room.getRoomId()+"36/devices/"+ device.getDeviceId()+"/command")
-				.contentType(MediaType.APPLICATION_JSON)
-				.content(this.objectMapper.writeValueAsString(c))
-				.header("X-AUTH-TOKEN", TOKEN))
-				.andExpect(status().is(404)).andDo(document("do-command-fail"));
-		
-
-	}
+//	@Test
+//	public void doCommand() throws Exception {
+//		
+//		
+//		Command c = new Command();
+//		c.setType(CommandType.SET.name());
+//		c.setValue(20);
+//		
+//		Room room = new Room();
+//		room.setRoomId(ROOM_ID);
+//		room.setName("Wohnzimmer");
+//		
+//		Device device = new Device();
+//		device.setName("Heizung");
+//		device.setType(Type.HEATING.name());
+//		device.setDeviceId(DEVICE_ID);
+//		
+//		
+//		this.mockMvc.perform(put("/api/rooms/"+room.getRoomId())
+//				.contentType(MediaType.APPLICATION_JSON)
+//				.content(this.objectMapper.writeValueAsString(room))
+//				.header("X-AUTH-TOKEN", TOKEN))
+//				.andExpect(status().isOk());	
+//		
+//
+//		
+//		this.mockMvc.perform(put("/api/rooms/"+room.getRoomId()+"/devices/"+ device.getDeviceId())
+//				.contentType(MediaType.APPLICATION_JSON)
+//				.content(this.objectMapper.writeValueAsString(device))
+//				.header("X-AUTH-TOKEN", TOKEN))
+//				.andExpect(status().isOk()).andDo(document("register-device-success"));
+//		
+//		
+//		
+//		this.mockMvc.perform(post("/api/rooms/"+room.getRoomId()+"/devices/"+ device.getDeviceId()+"/command")
+//				.contentType(MediaType.APPLICATION_JSON)
+//				.content(this.objectMapper.writeValueAsString(c))
+//				.header("X-AUTH-TOKEN", TOKEN))
+//				.andExpect(status().isOk()).andDo(document("do-command-success"));
+//		
+//		
+//		this.mockMvc.perform(post("/api/rooms/"+room.getRoomId()+"36/devices/"+ device.getDeviceId()+"/command")
+//				.contentType(MediaType.APPLICATION_JSON)
+//				.content(this.objectMapper.writeValueAsString(c))
+//				.header("X-AUTH-TOKEN", TOKEN))
+//				.andExpect(status().is(404)).andDo(document("do-command-fail"));
+//		
+//
+//	}
 	
 	@Test
 	public void getRoom() throws Exception {
