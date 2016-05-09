@@ -4,6 +4,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.delete;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.patch;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.put;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
@@ -75,6 +76,8 @@ public class Documentation {
 				.content(this.objectMapper.writeValueAsString(room))
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().isOk()).andDo(document("register-room"));
+		
+		
 	}
 	
 	@Test
@@ -101,6 +104,12 @@ public class Documentation {
 				.andExpect(status().is(404)).andDo(document("register-device-fail"));
 		
 		this.mockMvc.perform(put("/api/rooms/"+room.getRoomId()+"/devices/"+ device.getDeviceId())
+				.contentType(MediaType.APPLICATION_JSON)
+				.content(this.objectMapper.writeValueAsString(device))
+				.header("X-AUTH-TOKEN", TOKEN))
+				.andExpect(status().isOk()).andDo(document("register-device-success"));
+		
+		this.mockMvc.perform(patch("/api/rooms/"+room.getRoomId()+"/devices/"+ device.getDeviceId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(this.objectMapper.writeValueAsString(device))
 				.header("X-AUTH-TOKEN", TOKEN))

@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.hhn.se.embedded.zigbee.backend.ResponseMessage;
+
 @RestController
 public class UserController {
 
@@ -43,11 +45,11 @@ public class UserController {
 	}
 
 	@RequestMapping(value = "/api/register", method = RequestMethod.POST)
-	public ResponseEntity<String> addUser(@RequestBody final User user, HttpServletRequest req,
+	public ResponseEntity<ResponseMessage> addUser(@RequestBody final User user, HttpServletRequest req,
 			HttpServletResponse res) {
 		
 		if (user.getPassword() == null || user.getPassword().length() < 4) {
-			return new ResponseEntity<String>("password to short",
+			return new ResponseEntity<ResponseMessage>(new ResponseMessage("password to short"),
 					HttpStatus.UNPROCESSABLE_ENTITY);
 		}
 
@@ -61,7 +63,7 @@ public class UserController {
 		tokenAuthenticationService.addAuthentication(res, authentication);
 
 //		return ((UserAuthentication) authentication).getDetails();
-		return new ResponseEntity<String>("user successfully registered", HttpStatus.OK);
+		return new ResponseEntity<ResponseMessage>(new ResponseMessage("user successfully registered"), HttpStatus.OK);
 	}
 
 	@RequestMapping(value = "/api/users/current", method = RequestMethod.PATCH)

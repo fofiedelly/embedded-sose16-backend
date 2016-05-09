@@ -213,5 +213,7 @@ public class RoomController {
 		return  new ResponseEntity<String>("device registered", HttpStatus.OK);
 
 	}
+	
+
 
 }

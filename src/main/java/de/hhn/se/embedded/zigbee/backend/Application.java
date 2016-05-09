@@ -89,6 +89,7 @@ public class Application {
 			public void afterPropertiesSet() {
 				addUser("admin", "admin");
 				addUser("user", "user");
+				
 			}
 
 			private void addUser(String username, String password) {
@@ -102,7 +103,7 @@ public class Application {
 				
 
 				String[][] rooms = { { "Wohzimmer", "001" }, { "Schlafzimmer", "002" }, { "Küche", "003" } };
-				String[][] devices = { { "Heizung", "001" }, { "Licht", "002" }, { "Nachttischlampe", "003" } };
+				String[][] devices = { { "Heizung", "001", "20", "21" }, { "Licht", "002", "0", "0" }, { "Nachttischlampe", "003", "0", "0" } };
 
 				for (int i = 0; i < rooms.length; i++) {
 					for (int j = 0; j < rooms[i].length; j++) {
@@ -117,10 +118,16 @@ public class Application {
 						for (int k = 0; k < devices.length; k++) {
 							for (int l = 0; l < devices[k].length; l++) {
 
+								Float value = Float.parseFloat(devices[k][2]);
+								Float tValue = Float.parseFloat(devices[k][3]);
+								
 								Device device = new Device();
 								device.setDeviceId(room.getRoomId() + devices[k][1]);
 								device.setName(devices[k][0]);
 								device.setRoom(room);
+								device.setTargetValue(tValue);
+								device.setValue(value);
+								
 
 								deviceRepository.save(device);
 

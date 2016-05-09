@@ -25,6 +25,26 @@ public class Device {
 	
 	private String type;
 	
+	public Float getValue() {
+		return value;
+	}
+
+	public void setValue(Float value) {
+		this.value = value;
+	}
+
+	public Float getTargetValue() {
+		return targetValue;
+	}
+
+	public void setTargetValue(Float targetValue) {
+		this.targetValue = targetValue;
+	}
+
+	private Float value;
+	
+	private Float targetValue;
+	
     public String getType() {
 		return type;
 	}
