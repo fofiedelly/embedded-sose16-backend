@@ -13,18 +13,18 @@ import de.hhn.se.embedded.zigbee.backend.room.Room;
 @Entity
 @Table(name = "Device")
 public class Device {
-	
+
 	public enum Type {
-		HEATING, LIGHT
+		HEATING, SWITCH
 	}
-	
+
 	@Id
 	private String deviceId;
-	
+
 	private String name;
-	
+
 	private String type;
-	
+
 	public Float getValue() {
 		return value;
 	}
@@ -42,10 +42,10 @@ public class Device {
 	}
 
 	private Float value;
-	
+
 	private Float targetValue;
-	
-    public String getType() {
+
+	public String getType() {
 		return type;
 	}
 
@@ -54,8 +54,8 @@ public class Device {
 	}
 
 	@ManyToOne
-    @JoinColumn(name = "myRoom", nullable = false)
-    @JsonIgnore
+	@JoinColumn(name = "myRoom", nullable = false)
+	@JsonIgnore
 	private Room room;
 
 	public String getDeviceId() {

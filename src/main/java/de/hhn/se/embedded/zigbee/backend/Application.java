@@ -103,7 +103,7 @@ public class Application {
 				
 
 				String[][] rooms = { { "Wohzimmer", "001" }, { "Schlafzimmer", "002" }, { "Küche", "003" } };
-				String[][] devices = { { "Heizung", "001", "20", "21" }, { "Licht", "002", "0", "0" }, { "Nachttischlampe", "003", "0", "0" } };
+				String[][] devices = { { "Heizung", "001", "20", "21", "HEATING" }, { "Licht", "002", "0", "0", "SWITCH" }, { "Nachttischlampe", "003", "0", "0", "SWITCH" } };
 
 				for (int i = 0; i < rooms.length; i++) {
 					for (int j = 0; j < rooms[i].length; j++) {
@@ -127,6 +127,7 @@ public class Application {
 								device.setRoom(room);
 								device.setTargetValue(tValue);
 								device.setValue(value);
+								device.setType(devices[k][4]);
 								
 
 								deviceRepository.save(device);

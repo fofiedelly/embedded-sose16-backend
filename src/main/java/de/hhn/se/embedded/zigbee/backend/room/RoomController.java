@@ -72,10 +72,10 @@ public class RoomController {
 			return new ResponseEntity<String>("not a users room",
 					HttpStatus.UNAUTHORIZED);
 		}
-		
+
 		List<Device> devices = this.deviceRepository.findByRoom(toDelete);
-		if(devices != null && !devices.isEmpty()){
-			for(Device d : devices){
+		if (devices != null && !devices.isEmpty()) {
+			for (Device d : devices) {
 				this.deviceRepository.delete(d);
 			}
 		}
@@ -84,11 +84,12 @@ public class RoomController {
 		return new ResponseEntity<String>("room successfully removed",
 				HttpStatus.OK);
 	}
-	
+
 	@RequestMapping(value = "/api/rooms/{roomId}/devices/{deviceId}", method = RequestMethod.DELETE)
-	public ResponseEntity<String> deleteDevice(@PathVariable("roomId") String roomId,@PathVariable("deviceId") String deviceId,
-			HttpServletRequest req, HttpServletResponse res,
-			Principal currentUser) {
+	public ResponseEntity<String> deleteDevice(
+			@PathVariable("roomId") String roomId,
+			@PathVariable("deviceId") String deviceId, HttpServletRequest req,
+			HttpServletResponse res, Principal currentUser) {
 
 		User user = this.userRepository.findByUsername(currentUser.getName());
 		Room toDelete = this.roomRepository.findByRoomId(roomId);
@@ -102,14 +103,13 @@ public class RoomController {
 			return new ResponseEntity<String>("not a users room",
 					HttpStatus.UNAUTHORIZED);
 		}
-		
+
 		Device d = this.deviceRepository.findOne(deviceId);
-		if(d == null){
+		if (d == null) {
 			return new ResponseEntity<String>("device not found",
 					HttpStatus.NOT_FOUND);
 		}
 		this.deviceRepository.delete(deviceId);
-
 
 		return new ResponseEntity<String>("device successfully removed",
 				HttpStatus.OK);
@@ -134,6 +134,31 @@ public class RoomController {
 		return new ResponseEntity<Room>(room, HttpStatus.OK);
 	}
 
+	@RequestMapping(value = "/api/rooms/{id}", method = RequestMethod.PATCH)
+	public ResponseEntity<Room> updateRoom(@PathVariable("id") String id,
+			@RequestBody final Room room, HttpServletRequest req,
+			HttpServletResponse res, Principal currentUser) {
+
+		User user = this.userRepository.findByUsername(currentUser.getName());
+		Room fromDb = this.roomRepository.findByRoomId(id);
+
+		if (fromDb == null) {
+			return new ResponseEntity<Room>(HttpStatus.NOT_FOUND);
+		}
+
+		if (!fromDb.getUser().equals(user)) {
+			return new ResponseEntity<Room>(HttpStatus.UNAUTHORIZED);
+		}
+
+		if (room.getName() != null) {
+			fromDb.setName(room.getName());
+		}
+		
+		fromDb = this.roomRepository.save(fromDb);
+
+		return new ResponseEntity<Room>(fromDb, HttpStatus.OK);
+	}
+
 	@RequestMapping(value = "/api/rooms", method = RequestMethod.GET)
 	public List<Room> getAllRooms(Principal currentUser) {
 
@@ -150,11 +175,11 @@ public class RoomController {
 	// }
 
 	@RequestMapping(value = "/api/rooms/{id}/devices", method = RequestMethod.GET)
-	public ResponseEntity<List<Device>> getDevices(@PathVariable("id") String id,
-			Principal currentUser) {
+	public ResponseEntity<List<Device>> getDevices(
+			@PathVariable("id") String id, Principal currentUser) {
 		Room room = this.roomRepository.findByRoomId(id);
 		User user = this.userRepository.findByUsername(currentUser.getName());
-		
+
 		if (room == null) {
 			return new ResponseEntity<List<Device>>(HttpStatus.NOT_FOUND);
 		}
@@ -162,58 +187,61 @@ public class RoomController {
 		if (!room.getUser().equals(user)) {
 			return new ResponseEntity<List<Device>>(HttpStatus.UNAUTHORIZED);
 		}
-		return new ResponseEntity<List<Device>>(this.deviceRepository.findByRoom(room),HttpStatus.OK);
+		return new ResponseEntity<List<Device>>(
+				this.deviceRepository.findByRoom(room), HttpStatus.OK);
 
 	}
-	
+
 	@RequestMapping(value = "/api/rooms/{roomId}/devices/{deviceId}", method = RequestMethod.GET)
-	public ResponseEntity<Device> getDevice(@PathVariable("roomId") String roomId,@PathVariable("deviceId") String deviceId,
-			Principal currentUser) {
-		
+	public ResponseEntity<Device> getDevice(
+			@PathVariable("roomId") String roomId,
+			@PathVariable("deviceId") String deviceId, Principal currentUser) {
+
 		Room room = this.roomRepository.findByRoomId(roomId);
 		User user = this.userRepository.findByUsername(currentUser.getName());
-		
+
 		if (room == null) {
 			return new ResponseEntity<Device>(HttpStatus.NOT_FOUND);
 		}
 
 		if (!room.getUser().equals(user)) {
 			return new ResponseEntity<Device>(HttpStatus.UNAUTHORIZED);
-		}		
-		
+		}
+
 		Device device = this.deviceRepository.findOne(deviceId);
-		
-		if(device == null){
+
+		if (device == null) {
 			return new ResponseEntity<Device>(HttpStatus.NOT_FOUND);
 		}
 
-		return  new ResponseEntity<Device>(device, HttpStatus.OK);
+		return new ResponseEntity<Device>(device, HttpStatus.OK);
 
 	}
 
 	@RequestMapping(value = "/api/rooms/{roomId}/devices/{deviceId}", method = RequestMethod.PUT)
-	public ResponseEntity<String> postDevice(@PathVariable("roomId") String roomId,
+	public ResponseEntity<String> postDevice(
+			@PathVariable("roomId") String roomId,
 			@PathVariable("deviceId") String deviceId,
 			@RequestBody final Device device, Principal currentUser) {
-		
+
 		Room room = this.roomRepository.findByRoomId(roomId);
 		User user = this.userRepository.findByUsername(currentUser.getName());
-		
+
 		if (room == null) {
-			return new ResponseEntity<String>("room not found",HttpStatus.NOT_FOUND);
+			return new ResponseEntity<String>("room not found",
+					HttpStatus.NOT_FOUND);
 		}
 
 		if (!room.getUser().equals(user)) {
-			return new ResponseEntity<String>("not a users room", HttpStatus.UNAUTHORIZED);
-		}		
-		
+			return new ResponseEntity<String>("not a users room",
+					HttpStatus.UNAUTHORIZED);
+		}
+
 		device.setRoom(room);
 		device.setDeviceId(deviceId);
 		this.deviceRepository.save(device);
-		return  new ResponseEntity<String>("device registered", HttpStatus.OK);
+		return new ResponseEntity<String>("device registered", HttpStatus.OK);
 
 	}
-	
-
 
 }

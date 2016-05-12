@@ -94,7 +94,7 @@ public class Documentation {
 		
 		Device device = new Device();
 		device.setName("Licht");
-		device.setType(Type.LIGHT.name());
+		device.setType(Type.SWITCH.name());
 		device.setDeviceId(DEVICE_ID);
 		
 		this.mockMvc.perform(put("/api/rooms/"+room.getRoomId()+"1/devices/"+device.getDeviceId())
