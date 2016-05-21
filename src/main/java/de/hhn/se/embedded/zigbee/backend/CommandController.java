@@ -145,6 +145,10 @@ public class CommandController {
 		if (device.getValue() != null) {
 			fromDb.setValue(device.getValue());
 		}
+		
+		if (device.getTargetValueOnDevice() != null) {
+			fromDb.setTargetValueOnDevice(device.getTargetValueOnDevice());
+		}
 
 		if (device.getTargetValue() != null) {
 			fromDb.setTargetValue(device.getTargetValue());

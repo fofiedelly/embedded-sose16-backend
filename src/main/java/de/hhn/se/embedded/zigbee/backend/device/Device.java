@@ -24,6 +24,16 @@ public class Device {
 	private String name;
 
 	private String type;
+	
+	private Float targetValueOnDevice;
+
+	public Float getTargetValueOnDevice() {
+		return targetValueOnDevice;
+	}
+
+	public void setTargetValueOnDevice(Float targetValueOnDevice) {
+		this.targetValueOnDevice = targetValueOnDevice;
+	}
 
 	public Float getValue() {
 		return value;
