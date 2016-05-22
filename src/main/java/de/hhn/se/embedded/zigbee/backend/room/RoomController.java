@@ -36,7 +36,7 @@ public class RoomController {
 
 	@Autowired
 	private SimpMessagingTemplate template;
-	
+
 	// @RequestMapping(value = "/api/rooms", method = RequestMethod.POST)
 	// public Room addRoom(@RequestBody final Room room, HttpServletRequest req,
 	// HttpServletResponse res, Principal currentUser) {
@@ -56,11 +56,14 @@ public class RoomController {
 		room.setUser(user);
 		room.setRoomId(id);
 		this.roomRepository.save(room);
-		
-		String sendTo = "/"+currentUser.getName();
+
+		String sendToRooms = "/rooms";
+		this.template.convertAndSend(sendToRooms, room);
+
+		String sendTo = "/" + currentUser.getName();
 		Message msg = new Message("New room", "A new room has been registered!");
-	    this.template.convertAndSend(sendTo, msg);
-		
+		this.template.convertAndSend(sendTo, msg);
+
 		return new ResponseEntity<String>("room successfully registered",
 				HttpStatus.OK);
 	}
@@ -163,7 +166,7 @@ public class RoomController {
 		if (room.getName() != null) {
 			fromDb.setName(room.getName());
 		}
-		
+
 		fromDb = this.roomRepository.save(fromDb);
 
 		return new ResponseEntity<Room>(fromDb, HttpStatus.OK);
@@ -250,9 +253,14 @@ public class RoomController {
 		device.setRoom(room);
 		device.setDeviceId(deviceId);
 		this.deviceRepository.save(device);
-		String sendTo = "/"+currentUser.getName();
-		Message msg = new Message("New device", "A new device has been registered!");
-	    this.template.convertAndSend(sendTo, msg);
+
+		String sendToRoom = "/rooms/" + room.getRoomId() + "/devices";
+		this.template.convertAndSend(sendToRoom, device);
+
+		String sendTo = "/" + currentUser.getName();
+		Message msg = new Message("New device",
+				"A new device has been registered!");
+		this.template.convertAndSend(sendTo, msg);
 		return new ResponseEntity<String>("device registered", HttpStatus.OK);
 
 	}
