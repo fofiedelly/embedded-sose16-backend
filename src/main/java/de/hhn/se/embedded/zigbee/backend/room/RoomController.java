@@ -9,12 +9,14 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import de.hhn.se.embedded.zigbee.backend.Message;
 import de.hhn.se.embedded.zigbee.backend.device.Device;
 import de.hhn.se.embedded.zigbee.backend.device.DeviceRepository;
 import de.hhn.se.embedded.zigbee.backend.security.User;
@@ -32,6 +34,9 @@ public class RoomController {
 	@Autowired
 	DeviceRepository deviceRepository;
 
+	@Autowired
+	private SimpMessagingTemplate template;
+	
 	// @RequestMapping(value = "/api/rooms", method = RequestMethod.POST)
 	// public Room addRoom(@RequestBody final Room room, HttpServletRequest req,
 	// HttpServletResponse res, Principal currentUser) {
@@ -51,6 +56,11 @@ public class RoomController {
 		room.setUser(user);
 		room.setRoomId(id);
 		this.roomRepository.save(room);
+		
+		String sendTo = "/"+currentUser.getName();
+		Message msg = new Message("New room", "A new room has been registered!");
+	    this.template.convertAndSend(sendTo, msg);
+		
 		return new ResponseEntity<String>("room successfully registered",
 				HttpStatus.OK);
 	}
@@ -240,6 +250,9 @@ public class RoomController {
 		device.setRoom(room);
 		device.setDeviceId(deviceId);
 		this.deviceRepository.save(device);
+		String sendTo = "/"+currentUser.getName();
+		Message msg = new Message("New device", "A new device has been registered!");
+	    this.template.convertAndSend(sendTo, msg);
 		return new ResponseEntity<String>("device registered", HttpStatus.OK);
 
 	}
