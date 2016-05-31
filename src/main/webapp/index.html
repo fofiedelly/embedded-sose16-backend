@@ -1,20 +1,27 @@
-<!DOCTYPE html>
-<html ng-app="statelessApp">
-<head lang="en">
-	<title>Stateless Authentication Example</title>			
-	<script src="resources/js/angular.js"></script>
-	<script src="resources/js/controllers.js"></script>
+<!doctype html>
+<html class="no-js">
+
+<head>
+  <base href="/">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title ng-bind="pageTitle"></title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width">
+
+  <link rel="stylesheet" href="css/main.css">
 </head>
-<body ng-controller="AuthCtrl" ng-init="init()" style="padding: 10% 20%">
-	<div ng-hide="authenticated">
-		Login as user/user or admin/admin:<br>
-		<label for="un">Username:</label><input id="un" type="text" ng-model="username"><br>
-		<label for="pw">Password:</label><input id="pw" type="password" ng-model="password"><br>
-		<button ng-click="login()">Login</button>
-	</div>
-	<div ng-show="authenticated">
-		Logged in as {{username}} <button ng-click="logout()">Logout</button><br><br>
-		Token content: <pre>{{token | json}}</pre>
-	</div>
+
+<body>
+
+  <div class="container" ncy-breadcrumb></div>
+
+
+  <div class="container" ui-view="navigation"></div>
+  <div class="container animate" ui-view="content"></div>
+  <toasty></toasty>
+  <script src="js/main.js"></script>
+
 </body>
+
 </html>
