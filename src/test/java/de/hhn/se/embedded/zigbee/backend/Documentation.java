@@ -40,7 +40,7 @@ public class Documentation {
 
 	private static final String ROOM_ID = "d934eb20-4c6f-4d1c-91c5-61cdeddcf843";
 
-	private static final String TOKEN = "eyJpZCI6MTEsInVzZXJuYW1lIjoidXNlciIsImV4cGlyZXMiOjE0NjQ2ODgxMTkxOTMsInJvbGVzIjpbIlVTRVIiXX0=.5G9keu/iQWBqFA+LCS1UzuiRPjdgg0ixmbaZX6J06mM=";
+	private static final String TOKEN = "eyJpZCI6MTEsInVzZXJuYW1lIjoidXNlciIsImV4cGlyZXMiOjE0NjU1ODU4MDEzMjgsInJvbGVzIjpbIlVTRVIiXX0=.o52ZgG76Mo3OMTtun1Paf1Gu8mJ0ZTJ9v9Oy3fK25+0=";
 
 	@Autowired
 	private ObjectMapper objectMapper;
