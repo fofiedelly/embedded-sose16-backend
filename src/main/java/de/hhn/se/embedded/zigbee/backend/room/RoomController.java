@@ -1,6 +1,7 @@
 package de.hhn.se.embedded.zigbee.backend.room;
 
 import java.security.Principal;
+import java.util.Date;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,8 @@ import de.hhn.se.embedded.zigbee.backend.device.Device;
 import de.hhn.se.embedded.zigbee.backend.device.DeviceRepository;
 import de.hhn.se.embedded.zigbee.backend.security.User;
 import de.hhn.se.embedded.zigbee.backend.security.UserRepository;
+import de.hhn.se.embedded.zigbee.backend.timestamp.Timestamp;
+import de.hhn.se.embedded.zigbee.backend.timestamp.TimestampRepository;
 
 @RestController
 public class RoomController {
@@ -33,6 +36,9 @@ public class RoomController {
 
 	@Autowired
 	DeviceRepository deviceRepository;
+
+	@Autowired
+	TimestampRepository timestampRepository;
 
 	@Autowired
 	private SimpMessagingTemplate template;
@@ -228,6 +234,38 @@ public class RoomController {
 		}
 
 		return new ResponseEntity<Device>(device, HttpStatus.OK);
+
+	}
+
+	@RequestMapping(value = "/api/rooms/{roomId}/devices/{deviceId}/timestamps", method = RequestMethod.GET)
+	public ResponseEntity<List<Timestamp>> getDeviceTimestamps(
+			@PathVariable("roomId") String roomId,
+			@PathVariable("deviceId") String deviceId, Principal currentUser) {
+
+		Room room = this.roomRepository.findByRoomId(roomId);
+		User user = this.userRepository.findByUsername(currentUser.getName());
+
+		if (room == null) {
+			return new ResponseEntity<List<Timestamp>>(HttpStatus.NOT_FOUND);
+		}
+
+		if (!room.getUser().equals(user)) {
+			return new ResponseEntity<List<Timestamp>>(HttpStatus.UNAUTHORIZED);
+		}
+
+		Device device = this.deviceRepository.findOne(deviceId);
+
+		if (device == null) {
+			return new ResponseEntity<List<Timestamp>>(HttpStatus.NOT_FOUND);
+		}
+
+		Date end = new Date();
+		Date start = new Date(end.getTime() - 1000 * 60 * 60 * 8);
+
+		List<Timestamp> timestamps = this.timestampRepository
+				.findByDeviceIdAndTimestampBetween(deviceId, start, end);
+
+		return new ResponseEntity<List<Timestamp>>(timestamps, HttpStatus.OK);
 
 	}
 
