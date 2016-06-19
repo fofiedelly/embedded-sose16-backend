@@ -268,7 +268,7 @@ public class RoomController {
 		List<Timestamp> timestamps = this.timestampRepository
 				.findByDeviceId(deviceId);
 
-		return new ResponseEntity<List<Timestamp>>(timestamps, HttpStatus.OK);
+		return new ResponseEntity<List<Timestamp>>(this.timestampRepository.findAll(), HttpStatus.OK);
 
 	}
 
