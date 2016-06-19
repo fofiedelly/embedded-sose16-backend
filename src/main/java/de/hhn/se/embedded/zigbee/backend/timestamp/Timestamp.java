@@ -19,7 +19,7 @@ import de.hhn.se.embedded.zigbee.backend.device.Device;
 public class Timestamp {
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private String deviceId;
 
 	@ManyToOne
@@ -30,6 +30,10 @@ public class Timestamp {
 	private Date timestamp;
 
 	private float value;
+
+	public Timestamp() {
+
+	}
 
 	public Timestamp(Date time, float value, Device device) {
 		this.timestamp = time;
