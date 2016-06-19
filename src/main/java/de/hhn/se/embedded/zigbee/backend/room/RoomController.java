@@ -262,8 +262,11 @@ public class RoomController {
 		Date end = new Date();
 		Date start = new Date(end.getTime() - 1000 * 60 * 60 * 8);
 
+//		List<Timestamp> timestamps = this.timestampRepository
+//				.findByDeviceIdAndTimestampBetween(deviceId, start, end);
+		
 		List<Timestamp> timestamps = this.timestampRepository
-				.findByDeviceIdAndTimestampBetween(deviceId, start, end);
+				.findByDeviceId(deviceId);
 
 		return new ResponseEntity<List<Timestamp>>(timestamps, HttpStatus.OK);
 
