@@ -148,7 +148,7 @@ public class CommandController {
 		if (device.getValue() != null) {
 			fromDb.setValue(device.getValue());
 			this.timestampRepository.save(new Timestamp(new Date(), device
-					.getValue()));
+					.getValue(), device));
 		}
 
 		if (device.getTargetValueOnDevice() != null) {

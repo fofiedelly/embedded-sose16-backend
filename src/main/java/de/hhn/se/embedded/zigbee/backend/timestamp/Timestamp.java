@@ -31,9 +31,10 @@ public class Timestamp {
 
 	private float value;
 
-	public Timestamp(Date time, float value) {
+	public Timestamp(Date time, float value, Device device) {
 		this.timestamp = time;
 		this.value = value;
+		this.device = device;
 	}
 
 	public String getDeviceId() {
