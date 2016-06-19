@@ -3,6 +3,8 @@ package de.hhn.se.embedded.zigbee.backend.timestamp;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -17,6 +19,7 @@ import de.hhn.se.embedded.zigbee.backend.device.Device;
 public class Timestamp {
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
 	private String deviceId;
 
 	@ManyToOne
