@@ -20,7 +20,7 @@ public class Timestamp {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	private String deviceId;
+	private String Id;
 
 	@ManyToOne
 	@JoinColumn(name = "myDevice", nullable = false)
@@ -41,12 +41,12 @@ public class Timestamp {
 		this.device = device;
 	}
 
-	public String getDeviceId() {
-		return deviceId;
+	public String getId() {
+		return Id;
 	}
 
-	public void setDeviceId(String deviceId) {
-		this.deviceId = deviceId;
+	public void setId(String id) {
+		Id = id;
 	}
 
 	public Device getDevice() {
