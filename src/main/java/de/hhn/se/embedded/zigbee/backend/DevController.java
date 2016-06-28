@@ -37,6 +37,10 @@ public class DevController {
 	class RoomserverInfo {
 		private String ip;
 
+		public RoomserverInfo(){
+			
+		}
+		
 		public String getIp() {
 			return ip;
 		}
