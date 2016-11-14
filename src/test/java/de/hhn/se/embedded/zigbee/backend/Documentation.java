@@ -31,12 +31,13 @@ import de.hhn.se.embedded.zigbee.backend.device.Device;
 import de.hhn.se.embedded.zigbee.backend.device.Device.Type;
 import de.hhn.se.embedded.zigbee.backend.room.Room;
 
+
+public class Documentation {}
+	/*
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 public class Documentation {
-	/*
-
 	private static final String DEVICE_ID = "a614eb20-4c6f-4d1c-91c5-61cdeddcf843";
 
 	private static final String ROOM_ID = "d934eb20-4c6f-4d1c-91c5-61cdeddcf843";
@@ -64,7 +65,6 @@ public class Documentation {
 				.apply(documentationConfiguration(this.restDocumentation))
 				.build();
 	}
-
 
 	@Test
 	public void registerRoom() throws Exception {
@@ -263,7 +263,7 @@ public class Documentation {
 		this.mockMvc
 		.perform(
 				post("/api/login").contentType(
-						MediaType.APPLICATION_JSON).content("{\"username\":\"user1\", \"password\": \"user\"}"))
+						MediaType.APPLICATION_JSON).content("{\"username\":\"user1\", \"password\": \"uiser\"}"))
 		.andExpect(status().is(401)).andDo(document("login_fail"));
 
 		this.mockMvc
@@ -271,5 +271,5 @@ public class Documentation {
 						post("/api/login").contentType(
 								MediaType.APPLICATION_JSON).content("{\"username\":\"user\", \"password\": \"user\"}"))
 				.andExpect(status().isOk()).andDo(document("login_success"));
-	}//*/
-}
+	}
+}//*/
