@@ -35,6 +35,7 @@ import de.hhn.se.embedded.zigbee.backend.room.Room;
 @SpringApplicationConfiguration(classes = Application.class)
 @WebAppConfiguration
 public class Documentation {
+	/*
 
 	private static final String DEVICE_ID = "a614eb20-4c6f-4d1c-91c5-61cdeddcf843";
 
@@ -51,10 +52,10 @@ public class Documentation {
 
 	@Autowired
 	private WebApplicationContext context;
-	
+
 
 	private MockMvc mockMvc;
-	
+
 
 	@Before
 	public void setUp() {
@@ -64,184 +65,184 @@ public class Documentation {
 				.build();
 	}
 
-	
+
 	@Test
 	public void registerRoom() throws Exception {
 		Room room = new Room();
 		room.setRoomId(ROOM_ID);
 		room.setName("Wohnzimmer");
-		
+
 		this.mockMvc.perform(put("/api/rooms/"+room.getRoomId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(this.objectMapper.writeValueAsString(room))
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().isOk()).andDo(document("register-room"));
-		
-		
+
+
 	}
-	
+
 	@Test
 	public void device() throws Exception {
 		Room room = new Room();
 		room.setRoomId(ROOM_ID);
 		room.setName("Wohnzimmer");
-		
+
 		this.mockMvc.perform(put("/api/rooms/"+room.getRoomId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(this.objectMapper.writeValueAsString(room))
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().isOk());
-		
+
 		Device device = new Device();
 		device.setName("Licht");
 		device.setType(Type.SWITCH.name());
 		device.setDeviceId(DEVICE_ID);
-		
+
 		this.mockMvc.perform(put("/api/rooms/"+room.getRoomId()+"1/devices/"+device.getDeviceId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(this.objectMapper.writeValueAsString(device))
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().is(404)).andDo(document("register-device-fail"));
-		
+
 		this.mockMvc.perform(put("/api/rooms/"+room.getRoomId()+"/devices/"+ device.getDeviceId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(this.objectMapper.writeValueAsString(device))
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().isOk()).andDo(document("register-device-success"));
-		
+
 		this.mockMvc.perform(patch("/api/rooms/"+room.getRoomId()+"/devices/"+ device.getDeviceId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(this.objectMapper.writeValueAsString(device))
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().isOk()).andDo(document("register-device-success"));
-		
+
 		this.mockMvc.perform(get("/api/rooms/"+room.getRoomId()+"/devices/"+ device.getDeviceId()+"A")
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().is(404)).andDo(document("get-device-fail"));
-		
+
 		this.mockMvc.perform(get("/api/rooms/"+room.getRoomId()+"/devices/"+ device.getDeviceId())
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().isOk()).andDo(document("get-device-success"));
-		
+
 		this.mockMvc.perform(get("/api/rooms/"+room.getRoomId()+"/devices")
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().isOk()).andDo(document("get-devices-success"));
-		
+
 		this.mockMvc.perform(get("/api/rooms/"+room.getRoomId()+"145/devices")
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().is(404)).andDo(document("get-devices-fail"));
-		
+
 		this.mockMvc.perform(delete("/api/rooms/"+room.getRoomId()+"/devices/"+ device.getDeviceId())
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().isOk()).andDo(document("delete-device-success"));
-		
+
 		this.mockMvc.perform(delete("/api/rooms/"+room.getRoomId()+"/devices/"+ device.getDeviceId()+"12")
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().is(404)).andDo(document("delete-device-fail"));
-		
-		
+
+
 	}
-	
+
 //	@Test
 //	public void doCommand() throws Exception {
-//		
-//		
+//
+//
 //		Command c = new Command();
 //		c.setType(CommandType.SET.name());
 //		c.setValue(20);
-//		
+//
 //		Room room = new Room();
 //		room.setRoomId(ROOM_ID);
 //		room.setName("Wohnzimmer");
-//		
+//
 //		Device device = new Device();
 //		device.setName("Heizung");
 //		device.setType(Type.HEATING.name());
 //		device.setDeviceId(DEVICE_ID);
-//		
-//		
+//
+//
 //		this.mockMvc.perform(put("/api/rooms/"+room.getRoomId())
 //				.contentType(MediaType.APPLICATION_JSON)
 //				.content(this.objectMapper.writeValueAsString(room))
 //				.header("X-AUTH-TOKEN", TOKEN))
-//				.andExpect(status().isOk());	
-//		
+//				.andExpect(status().isOk());
 //
-//		
+//
+//
 //		this.mockMvc.perform(put("/api/rooms/"+room.getRoomId()+"/devices/"+ device.getDeviceId())
 //				.contentType(MediaType.APPLICATION_JSON)
 //				.content(this.objectMapper.writeValueAsString(device))
 //				.header("X-AUTH-TOKEN", TOKEN))
 //				.andExpect(status().isOk()).andDo(document("register-device-success"));
-//		
-//		
-//		
+//
+//
+//
 //		this.mockMvc.perform(post("/api/rooms/"+room.getRoomId()+"/devices/"+ device.getDeviceId()+"/command")
 //				.contentType(MediaType.APPLICATION_JSON)
 //				.content(this.objectMapper.writeValueAsString(c))
 //				.header("X-AUTH-TOKEN", TOKEN))
 //				.andExpect(status().isOk()).andDo(document("do-command-success"));
-//		
-//		
+//
+//
 //		this.mockMvc.perform(post("/api/rooms/"+room.getRoomId()+"36/devices/"+ device.getDeviceId()+"/command")
 //				.contentType(MediaType.APPLICATION_JSON)
 //				.content(this.objectMapper.writeValueAsString(c))
 //				.header("X-AUTH-TOKEN", TOKEN))
 //				.andExpect(status().is(404)).andDo(document("do-command-fail"));
-//		
+//
 //
 //	}
-	
+
 	@Test
 	public void getRoom() throws Exception {
 		Room room = new Room();
 		room.setRoomId(ROOM_ID);
 		room.setName("Wohnzimmer");
-		
+
 		this.mockMvc.perform(put("/api/rooms/"+room.getRoomId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(this.objectMapper.writeValueAsString(room))
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().isOk());
-		
+
 		this.mockMvc.perform(get("/api/rooms/"+room.getRoomId())
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().isOk()).andDo(document("get-room-success"));
-		
+
 		this.mockMvc.perform(get("/api/rooms/"+room.getRoomId()+1)
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().is(404)).andDo(document("get-room-fail"));
-		
+
 		this.mockMvc.perform(get("/api/rooms")
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().isOk()).andDo(document("get-rooms-success"));
 	}
-	
+
 	@Test
 	public void deleteRoom() throws Exception {
 		Room room = new Room();
 		room.setRoomId(ROOM_ID);
 		room.setName("Wohnzimmer");
-		
+
 		this.mockMvc.perform(put("/api/rooms/"+room.getRoomId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.content(this.objectMapper.writeValueAsString(room))
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().isOk());
-		
+
 		this.mockMvc.perform(delete("/api/rooms/"+room.getRoomId()+"1")
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().is(404)).andDo(document("delete-room-fail"));
-		
+
 		this.mockMvc.perform(delete("/api/rooms/"+room.getRoomId())
 				.contentType(MediaType.APPLICATION_JSON)
 				.header("X-AUTH-TOKEN", TOKEN))
 				.andExpect(status().isOk()).andDo(document("delete-room-success"));
 	}
-	
-	
-	
+
+
+
 	@Test
 	public void register() throws Exception {
 		this.mockMvc
@@ -249,14 +250,14 @@ public class Documentation {
 				post("/api/register").contentType(
 						MediaType.APPLICATION_JSON).content("{\"username\":\"testuser\", \"password\": \"123\"}"))
 		.andExpect(status().is(422)).andDo(document("register_fail"));
-		
+
 		this.mockMvc
 				.perform(
 						post("/api/register").contentType(
 								MediaType.APPLICATION_JSON).content("{\"username\":\"testuser\", \"password\": \"testpassword\"}"))
 				.andExpect(status().isOk()).andDo(document("register_success"));
 	}
-	
+
 	@Test
 	public void login() throws Exception {
 		this.mockMvc
@@ -264,11 +265,11 @@ public class Documentation {
 				post("/api/login").contentType(
 						MediaType.APPLICATION_JSON).content("{\"username\":\"user1\", \"password\": \"user\"}"))
 		.andExpect(status().is(401)).andDo(document("login_fail"));
-		
+
 		this.mockMvc
 				.perform(
 						post("/api/login").contentType(
 								MediaType.APPLICATION_JSON).content("{\"username\":\"user\", \"password\": \"user\"}"))
 				.andExpect(status().isOk()).andDo(document("login_success"));
-	}
+	}//*/
 }
